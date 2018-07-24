@@ -1,23 +1,35 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { Http } from '@angular/http';
 import { Observable } from 'rxjs';
 
+interface recordsData {
+    records: Array<any>;
+}
+
 @Injectable()
-export class AuthService {
-    myData : any;
+export class AuthService implements OnInit {
+    items : Array<any>;
+    data: recordsData;
     constructor(private http: Http){
 
     }
+
+    ngOnInit() {
+       //this.getUserDetails('', ''); 
+    }
     
-    getUserDetails(username, password){
+    getUserDetails(username, password, callback){
         this.http.get('http://localhost/SugarApi.php', {})
         .subscribe(
-        (data) => {
-            data = JSON.parse(data['_body']);
+        (response) => {
+            
+            this.data = JSON.parse(response['_body']);
+            this.items = this.data.records;
+            callback(this.items);
             //console.log(data); 
-            this.myData = data;
+            //this.items = data.records;
 
-           console.log("My data", data);
+           //console.log("My data", data);
         },
         err => console.log(err), // error
         () => console.log('getUserStatus Complete') // complete

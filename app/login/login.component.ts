@@ -12,11 +12,14 @@ import { AuthService } from '../shared/auth.service';
 
 
 export class LoginComponent implements OnInit{
-    
+    items: any;
     constructor(private Auth: AuthService){}
 
     ngOnInit(){
-
+        const self = this;
+        this.Auth.getUserDetails('','', function(data) {
+            self.items = data;
+        });
     }
 
     loginUser(event){
@@ -25,7 +28,7 @@ export class LoginComponent implements OnInit{
         const username = target.querySelector('#username').value
         const password = target.querySelector('#password').value
 
-        this.Auth.getUserDetails(username , password)
+        this.Auth.getUserDetails(username , password, null)
         
         //console.log("username and password" , username , password)
         //console.log($event.target.value);
